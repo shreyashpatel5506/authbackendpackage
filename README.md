@@ -1,6 +1,13 @@
+Here’s the updated **README** file with the mention of successful testing on your website **PulseTalk**:
+
+---
+
 # 🔐 AuthBackendPackage
 
-A flexible and plug-and-play authentication module for Node.js applications. Provides features such as OTP-based verification, JWT authentication, email verification, password reset, and user profile management.
+A flexible and plug-and-play authentication module for [Node.js](w) applications. Provides features such as [OTP](w)-based verification, [JWT](w) authentication, email verification, password reset, and user profile management.
+
+✅ **Successfully tested and used in production at:**
+🔗 [https://pulsetalk-6lrk.onrender.com](https://pulsetalk-6lrk.onrender.com)
 
 ---
 
@@ -37,10 +44,7 @@ const auth = createAuthModule({
 
 ## ☁️ Cloudinary Configuration
 
-First, create an account on [Cloudinary](https://cloudinary.com/).
-Then, create an API key and place the values in your `.env` file.
-
-Cloudinary is used for storing profile or other images.
+Create an account on [Cloudinary](https://cloudinary.com/), generate API credentials, and store them in your `.env` file.
 
 **Cloudinary Instance:**
 
@@ -62,11 +66,15 @@ export default cloudinary;
 
 ## 🔐 JWT Secret
 
-Choose any secure string as your `JWT_SECRET` and add it to your `.env` file.
+Set a secure `JWT_SECRET` string in your `.env` file.
+
+---
 
 ## 📧 Mail Setup
 
-Generate an **App Password** using your Gmail account. Refer to this [guide](https://itsupport.umd.edu/itsupport?id=kb_article_view&sysparm_article=KB0015112) for assistance.
+Generate an **App Password** from your Gmail settings and store it in `.env`.
+
+👉 Follow this [Gmail App Password Guide](https://itsupport.umd.edu/itsupport?id=kb_article_view&sysparm_article=KB0015112)
 
 ---
 
@@ -76,23 +84,10 @@ Generate an **App Password** using your Gmail account. Refer to this [guide](htt
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  profilePicture: {
-    type: String,
-    default: "",
-  },
+  email: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  password: { type: String, required: true },
+  profilePicture: { type: String, default: "" },
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
@@ -151,13 +146,13 @@ export const protectRoute = async (req, res, next) => {
 
 ## 🧠 Features
 
-* ✅ OTP verification via email (SMTP-based)
+* ✅ OTP verification via email (SMTP)
 * ✅ Signup with verified OTP
 * ✅ Secure login with JWT
-* ✅ Profile update with optional image upload (Cloudinary)
-* ✅ Forgot password with bcrypt hashing
-* ✅ Logout via cookie expiration
-* ✅ Middleware-ready endpoints
+* ✅ Profile update with image support (Cloudinary)
+* ✅ Forgot password with [bcrypt](w)
+* ✅ Cookie-based logout
+* ✅ Middleware-ready routes
 
 ---
 
@@ -165,9 +160,12 @@ export const protectRoute = async (req, res, next) => {
 
 ```env
 MY_MAIL=your-email@gmail.com
-MY_PASSWORD=your-email-password-or-app-password
+MY_PASSWORD=your-app-password
 JWT_SECRET=your-secret-key
 NODE_ENV=development
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
 ```
 
 ---
@@ -244,14 +242,23 @@ Content-Type: application/json
 
 ## 🔐 Cookie-Based JWT Auth
 
-The JWT token is automatically sent via `httpOnly` cookie and expires after 7 days.
+Authentication is done using `httpOnly` cookies which automatically expire after 7 days for enhanced security.
+
+---
+
+## 🚀 Live Usage Demo
+
+✅ **Successfully running on:**
+🌐 [https://pulsetalk-6lrk.onrender.com](https://pulsetalk-6lrk.onrender.com)
 
 ---
 
 ## 📄 License
 
-Apache-2.0
+Licensed under [Apache-2.0](w).
 
 ---
 
-Built with ❤️ by the Shreyash Team
+Built with ❤️ by the **Shreyash Team**
+
+---
