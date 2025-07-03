@@ -1,0 +1,19 @@
+{
+  "name": "authbackendpackage",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shreyashpatel5506/authbackendpackage.git"
+  },
+  "author": "shreyash patel",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/shreyashpatel5506/authbackendpackage/issues"
+  },
+  "homepage": "https://github.com/shreyashpatel5506/authbackendpackage#readme",
+  "description": ""
+}
