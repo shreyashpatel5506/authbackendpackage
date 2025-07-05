@@ -1,4 +1,3 @@
-Here’s the updated **README** file with the mention of successful testing on your website **PulseTalk**:
 
 ---
 
