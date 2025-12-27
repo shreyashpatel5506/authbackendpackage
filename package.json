@@ -9,6 +9,7 @@
     "auth",
     "otp",
     "nodemailer",
+    "axios",
     "jwt",
     "bcrypt",
     "cloudinary"
