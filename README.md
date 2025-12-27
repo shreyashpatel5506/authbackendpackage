@@ -33,8 +33,9 @@ const auth = createAuthModule({
   userModel,
   cloudinaryInstance: cloudinary,
   jwtSecret: process.env.JWT_SECRET,
-  mailUser: process.env.MY_MAIL,
-  mailPass: process.env.MY_PASSWORD,
+  BREVO_API_KEY=your_brevo_api_key_here
+BREVO_SENDER_EMAIL=noreply@pulsetalk.com
+BREVO_SENDER_NAME=PulseTalk
   env: process.env.NODE_ENV,
 });
 ```
@@ -158,8 +159,9 @@ export const protectRoute = async (req, res, next) => {
 ## 🧪 Example `.env`
 
 ```env
-MY_MAIL=your-email@gmail.com
-MY_PASSWORD=your-app-password
+BREVO_API_KEY=your_brevo_api_key_here
+BREVO_SENDER_EMAIL=noreply@pulsetalk.com
+BREVO_SENDER_NAME=PulseTalk
 JWT_SECRET=your-secret-key
 NODE_ENV=development
 CLOUDINARY_CLOUD_NAME=your-cloud-name
