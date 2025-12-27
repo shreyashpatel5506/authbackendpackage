@@ -186,7 +186,29 @@ export const createAuthModule = ({
             res.status(500).json({ message: err.message });
         }
     };
+ const updateProfile = async (req, res) => {
+        try {
+            const userId = req.user._id;
+            const { name, profilePicture } = req.body;
 
+            const updatedFields = {};
+            if (name) updatedFields.name = name;
+
+            if (profilePicture && profilePicture.trim() !== '') {
+                try {
+                    const pic = await cloudinaryInstance.uploader.upload(profilePicture);
+                    updatedFields.profilePicture = pic.secure_url;
+                } catch {
+                    return res.status(400).json({ message: "Invalid profile picture format" });
+                }
+            }
+
+            const user = await userModel.findByIdAndUpdate(userId, updatedFields, { new: true });
+            return res.status(200).json({ message: "Profile updated", success: true, user });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    };
     return {
         sendOtp,
         verifyOTP,
