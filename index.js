@@ -5,8 +5,8 @@ dotenv.config();
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import dns from "dns/promises";
+import axios from "axios";
 
 export const createAuthModule = ({
     userModel,
@@ -31,55 +31,72 @@ export const createAuthModule = ({
         return token;
     };
 
-    // ================= BREVO SMTP =================
-    const transporter = nodemailer.createTransport({
-        host: process.env.BREVO_SMTP_HOST,
-        port: process.env.BREVO_SMTP_PORT,
-        secure: false,
-        auth: {
-            user: process.env.BREVO_SMTP_USER, // always "apikey"
-            pass: process.env.BREVO_SMTP_PASS, // Brevo API key
-        },
-    });
+    // ================= BREVO API =================
+    const sendBrevoEmail = async ({ to, subject, html }) => {
+        return axios.post(
+            "https://api.brevo.com/v3/smtp/email",
+            {
+                sender: {
+                    name: process.env.BREVO_SENDER_NAME,
+                    email: process.env.BREVO_SENDER_EMAIL,
+                },
+                to: [{ email: to }],
+                subject,
+                htmlContent: html,
+            },
+            {
+                headers: {
+                    "api-key": process.env.BREVO_API_KEY,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+    };
 
     // ================= SEND OTP =================
     const sendOtp = async (req, res) => {
         const { email } = req.body;
-        if (!email) return res.status(400).json({ message: "Email is required", success: false });
+        if (!email) return res.status(400).json({ message: "Email required", success: false });
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email))
-            return res.status(422).json({ message: "Invalid email format", success: false });
+            return res.status(422).json({ message: "Invalid email", success: false });
 
         try {
             const domain = email.split("@")[1];
-            const mxRecords = await dns.resolveMx(domain);
-            if (!mxRecords.length)
-                return res.status(452).json({ message: "Email domain not valid", success: false });
+            const mx = await dns.resolveMx(domain);
+            if (!mx.length)
+                return res.status(452).json({ message: "Invalid email domain", success: false });
         } catch {
-            return res.status(452).json({ message: "Invalid email domain", success: false });
+            return res.status(452).json({ message: "Email domain unreachable", success: false });
         }
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        const mailOptions = {
-            from: "PulseTalk <noreply@pulsetalk.com>", // Brevo verified sender
-            to: email,
-            subject: "🔐 Your PulseTalk OTP",
-            html: `
-                <h3>Your OTP Code</h3>
-                <p><b>${otp}</b></p>
-                <p>Valid for 10 minutes</p>
-            `,
-        };
-
         try {
-            await transporter.sendMail(mailOptions);
-            otpStorage.set(email, { otp, verified: false, createdAt: Date.now() });
+            await sendBrevoEmail({
+                to: email,
+                subject: "🔐 Your PulseTalk OTP",
+                html: `
+                    <h2>OTP Verification</h2>
+                    <p>Your OTP is:</p>
+                    <h1>${otp}</h1>
+                    <p>Valid for 10 minutes</p>
+                `,
+            });
 
-            return res.status(200).json({ message: "OTP sent successfully", success: true });
+            otpStorage.set(email, {
+                otp,
+                verified: false,
+                createdAt: Date.now(),
+            });
+
+            return res.status(200).json({ message: "OTP sent", success: true });
         } catch (error) {
-            return res.status(502).json({ message: "Brevo email failed", success: false });
+            return res.status(502).json({
+                message: "Brevo API email failed",
+                success: false,
+            });
         }
     };
 
