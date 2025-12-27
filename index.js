@@ -217,5 +217,6 @@ export const createAuthModule = ({
         logout,
         checkAuth,
         forgotPassword,
+        updateProfile
     };
 };
