@@ -6,7 +6,6 @@ dotenv.config();
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dns from "dns/promises";
-import axios from "axios";
 
 export const createAuthModule = ({
     userModel,
