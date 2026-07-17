@@ -9,7 +9,7 @@ A flexible and plug-and-play authentication module for [Node.js](w) applications
 🔗 [https://pulsetalk-6lrk.onrender.com](https://pulsetalk-6lrk.onrender.com)
 
 ---
-
+Total downloads :- 1200+
 ## 🔧 Installation
 
 ```bash
